@@ -19,7 +19,26 @@ export default class extends BaseSchema {
       table.decimal('preco').notNullable()
       table.integer('qtd_estoque').notNullable()
 
-      table.integer('categoria_id').unsigned().references('categorias.id').notNullable()
+      table.timestamp('created_at')
+      table.timestamp('updated_at')
+    })
+
+    this.schema.createTable('categoria_produto', (table) => {
+      table.increments('id')
+
+      table
+        .integer('categoria_id')
+        .unsigned()
+        .references('categorias.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table
+        .integer('produto_id')
+        .unsigned()
+        .references('produtos.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table.unique(['categoria_id', 'produto_id'])
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -83,6 +102,7 @@ export default class extends BaseSchema {
   async down() {
     this.schema.dropTable('categoria')
     this.schema.dropTable('produtos')
+    this.schema.dropTable('categoria_produto')
     this.schema.dropTable('pedidos')
     this.schema.dropTable('pagamentos')
     this.schema.dropTable('itens_pedido')
