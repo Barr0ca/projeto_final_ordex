@@ -19,7 +19,9 @@ export default class Produto extends BaseModel {
   @column()
   declare quatidade_estoque: number
 
-  @manyToMany(() => Categoria)
+  @manyToMany(() => Categoria, {
+    pivotTable: 'categoria_produto',
+  })
   declare categoria: ManyToMany<typeof Categoria>
 
   @column.dateTime({ autoCreate: true })
