@@ -1,0 +1,26 @@
+import { DateTime } from 'luxon'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
+
+enum Status {
+  'ESPERA',
+  'ROTA_ENTREGA',
+  'CANCELADO',
+  'ENTREGUE',
+}
+
+export default class Pedido extends BaseModel {
+  @column({ isPrimary: true })
+  declare id: number
+
+  @column()
+  declare status: Status
+
+  @column()
+  declare total: number
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
