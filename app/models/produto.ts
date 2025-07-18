@@ -17,7 +17,7 @@ export default class Produto extends BaseModel {
   declare preco: number
 
   @column()
-  declare quatidade_estoque: number
+  declare quantidadeEstoque: number
 
   @manyToMany(() => Categoria, {
     pivotTable: 'categoria_produto',
