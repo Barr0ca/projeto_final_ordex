@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import Pagamento from '#models/pagamento'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Produto from '#models/produto'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
 enum Status {
   'ESPERA',
@@ -22,6 +23,13 @@ export default class Pedido extends BaseModel {
 
   @hasMany(() => Pagamento)
   declare pagamento: HasMany<typeof Pagamento>
+
+  @manyToMany(() => Produto, {
+    pivotTable: 'itens_pedido',
+    pivotColumns: ['quantidade', 'preco_unitario'],
+    pivotTimestamps: true,
+  })
+  declare produto: ManyToMany<typeof Produto>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
