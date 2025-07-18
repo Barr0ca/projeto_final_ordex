@@ -5,6 +5,7 @@ import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import Pedido from '#models/pedido'
+import EnderecoEntrega from '#models/endereco_entrega'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -27,6 +28,9 @@ export default class Usuario extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Pedido)
   declare pedido: HasMany<typeof Pedido>
+
+  @hasMany(() => EnderecoEntrega)
+  declare enderecoEntrega: HasMany<typeof EnderecoEntrega>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
