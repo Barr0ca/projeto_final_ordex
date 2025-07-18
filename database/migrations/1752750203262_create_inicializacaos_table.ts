@@ -24,7 +24,7 @@ export default class extends BaseSchema {
     })
 
     this.schema.createTable('categoria_produto', (table) => {
-      table.increments('id')
+      table.increments('id').primary()
 
       table
         .integer('categoria_id')
@@ -80,7 +80,7 @@ export default class extends BaseSchema {
     })
 
     this.schema.createTable('itens_pedido', (table) => {
-      table.increments('id')
+      table.increments('id').primary()
 
       table.integer('quantidade').notNullable()
       table.decimal('preco_unitario').notNullable()
@@ -97,6 +97,7 @@ export default class extends BaseSchema {
         .references('produtos.id')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
+      table.unique(['pedido_id', 'produto_id'])
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
