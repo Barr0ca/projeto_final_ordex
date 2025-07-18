@@ -19,7 +19,26 @@ export default class extends BaseSchema {
       table.decimal('preco').notNullable()
       table.integer('qtd_estoque').notNullable()
 
-      table.integer('categoria_id').unsigned().references('categorias.id').notNullable()
+      table.timestamp('created_at')
+      table.timestamp('updated_at')
+    })
+
+    this.schema.createTable('categoria_produto', (table) => {
+      table.increments('id').primary()
+
+      table
+        .integer('categoria_id')
+        .unsigned()
+        .references('categorias.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table
+        .integer('produto_id')
+        .unsigned()
+        .references('produtos.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table.unique(['categoria_id', 'produto_id'])
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -28,10 +47,15 @@ export default class extends BaseSchema {
     this.schema.createTable('pedidos', (table) => {
       table.increments('id')
 
-      table.enum('status', ['ESPERA', 'ROTA_ENTREGA', 'CANCELADO', 'ENTREGUE']).notNullable()
+      table.enum('status', ['ESPERA', 'ROTA_ENTREGA', 'CANCELADO', 'ENTREGUE']).defaultTo('ESPERA')
       table.decimal('total').notNullable()
 
-      table.integer('usuario_id').unsigned().references('usuarios.id').notNullable()
+      table
+        .integer('usuario_id')
+        .unsigned()
+        .references('usuarios.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -41,23 +65,39 @@ export default class extends BaseSchema {
       table.increments('id')
 
       table.enum('metodos_pagamento', ['CARTAO_CREDITO', 'PIX', 'BOLETO']).notNullable()
-      table.enum('status', ['ESPERA', 'COMPLETO', 'FALHOU']).notNullable()
+      table.enum('status', ['ESPERA', 'COMPLETO', 'FALHOU']).defaultTo('ESPERA')
       table.decimal('valor_pagamento').notNullable()
 
-      table.integer('pedido_id').unsigned().references('pedidos.id').notNullable()
+      table
+        .integer('pedido_id')
+        .unsigned()
+        .references('pedidos.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
 
     this.schema.createTable('itens_pedido', (table) => {
-      table.increments('id')
+      table.increments('id').primary()
 
       table.integer('quantidade').notNullable()
       table.decimal('preco_unitario').notNullable()
 
-      table.integer('pedido_id').unsigned().references('pedidos.id').notNullable()
-      table.integer('produto_id').unsigned().references('produtos.id').notNullable()
+      table
+        .integer('pedido_id')
+        .unsigned()
+        .references('pedidos.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table
+        .integer('produto_id')
+        .unsigned()
+        .references('produtos.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table.unique(['pedido_id', 'produto_id'])
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -72,8 +112,18 @@ export default class extends BaseSchema {
       table.string('caixa_postal', 50).notNullable()
       table.string('pais', 100).notNullable()
 
-      table.integer('pedido_id').unsigned().references('pedidos.id').notNullable()
-      table.integer('usuario_id').unsigned().references('usuarios.id').notNullable()
+      table
+        .integer('pedido_id')
+        .unsigned()
+        .references('pedidos.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+      table
+        .integer('usuario_id')
+        .unsigned()
+        .references('usuarios.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -83,6 +133,7 @@ export default class extends BaseSchema {
   async down() {
     this.schema.dropTable('categoria')
     this.schema.dropTable('produtos')
+    this.schema.dropTable('categoria_produto')
     this.schema.dropTable('pedidos')
     this.schema.dropTable('pagamentos')
     this.schema.dropTable('itens_pedido')
