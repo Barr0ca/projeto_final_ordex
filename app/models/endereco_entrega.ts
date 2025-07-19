@@ -20,6 +20,12 @@ export default class EnderecoEntrega extends BaseModel {
   @column()
   declare pais: string
 
+  @column()
+  declare pedidoId: number
+
+  @column()
+  declare usuarioId: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
