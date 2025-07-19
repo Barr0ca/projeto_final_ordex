@@ -26,6 +26,9 @@ export default class Pagamento extends BaseModel {
   @column()
   declare valorPagamento: number
 
+  @column()
+  declare pedidoId: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
