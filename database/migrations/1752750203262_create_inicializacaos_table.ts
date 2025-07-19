@@ -17,7 +17,7 @@ export default class extends BaseSchema {
       table.string('nome', 150).notNullable()
       table.text('descricao').notNullable()
       table.decimal('preco').notNullable()
-      table.integer('qtd_estoque').notNullable()
+      table.integer('quantidade_estoque').notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
