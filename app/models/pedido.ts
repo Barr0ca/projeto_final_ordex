@@ -6,10 +6,10 @@ import EnderecoEntrega from '#models/endereco_entrega'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
 enum Status {
-  'ESPERA',
-  'ROTA_ENTREGA',
-  'CANCELADO',
-  'ENTREGUE',
+  ESPERA = 'ESPERA',
+  ROTA_ENTREGA = 'ROTA_ENTREGA',
+  CANCELADO = 'CANCELADO',
+  ENTREGUE = 'ENTREGUE',
 }
 
 export default class Pedido extends BaseModel {

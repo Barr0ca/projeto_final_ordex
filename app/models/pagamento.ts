@@ -2,15 +2,15 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 enum MetodoPagamento {
-  'CARTAO_CREDITO',
-  'PIX',
-  'BOLETO',
+  CARTAO_CREDITO = 'CARTAO_CREDITO',
+  PIX = 'PIX',
+  BOLETO = 'BOLETO',
 }
 
 enum Status {
-  'ESPERA',
-  'COMPLETO',
-  'FALHOU',
+  ESPERA = 'ESPERA',
+  COMPLETO = 'COMPLETO',
+  FALHOU = 'FALHOU',
 }
 
 export default class Pagamento extends BaseModel {
@@ -18,7 +18,7 @@ export default class Pagamento extends BaseModel {
   declare id: number
 
   @column()
-  declare metodosPagamentos: MetodoPagamento
+  declare metodosPagamento: MetodoPagamento
 
   @column()
   declare status: Status
