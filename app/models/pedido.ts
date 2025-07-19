@@ -22,6 +22,9 @@ export default class Pedido extends BaseModel {
   @column()
   declare total: number
 
+  @column()
+  declare usuarioId: number
+
   @hasMany(() => Pagamento)
   declare pagamento: HasMany<typeof Pagamento>
 
