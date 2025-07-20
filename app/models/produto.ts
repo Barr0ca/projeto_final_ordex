@@ -30,7 +30,7 @@ export default class Produto extends BaseModel {
     pivotColumns: ['quantidade', 'preco_unitario'],
     pivotTimestamps: true,
   })
-  declare produto: ManyToMany<typeof Pedido>
+  declare pedido: ManyToMany<typeof Pedido>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
