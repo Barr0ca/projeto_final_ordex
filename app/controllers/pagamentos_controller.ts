@@ -3,15 +3,13 @@ import Pagamento from '#models/pagamento'
 
 export default class PagamentosController {
   public async index({}: HttpContext) {
-    return await Pagamento.query().preload('usuario')
+    return await Pagamento.all()
   }
   public async show({ params }: HttpContext) {
-    return await Pagamento.query().where('id', params.id).preload('usuario').firstOrFail()
+    return await Pagamento.findOrFail(params.id)
   }
   public async store({ request }: HttpContext) {
-    return await Pagamento.create(
-      request.only(['metodos_pagamento', 'status', 'valor_pagamento', 'pedidoId'])
-    )
+    return await Pagamento.create(request.only(['metodos_pagamento', 'status', 'valor_pagamento', 'pedidoId']))
   }
   public async update({ request, params }: HttpContext) {
     const pagamento = await Pagamento.findOrFail(params.id)
@@ -22,6 +20,6 @@ export default class PagamentosController {
   public async destroy({ params }: HttpContext) {
     const pagamento = await Pagamento.findOrFail(params.id)
     await pagamento.delete()
-    return { message: 'Pagamento deletado com sucesso.' }
+    return {message: 'Pagamento deletado com sucesso.'}
   }
 }
