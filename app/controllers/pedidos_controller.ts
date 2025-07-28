@@ -14,7 +14,12 @@ export default class PedidosController {
   }
 
   async show({ params }: HttpContext) {
-    return await Pedido.findOrFail(params.id)
+    return await Pedido.query()
+      .where('id', params.id)
+      .preload('produto', (query) => query.pivotColumns(['quantidade', 'preco_unitario']))
+      .preload('pagamento')
+      .preload('enderecoEntrega')
+      .firstOrFail()
   }
 
   async update({ params, request }: HttpContext) {
@@ -25,5 +30,6 @@ export default class PedidosController {
   async destroy({ params }: HttpContext) {
     const pedido = await Pedido.findOrFail(params.id)
     await pedido.delete()
+    return { message: 'Pedido deletado com sucesso.' }
   }
 }
