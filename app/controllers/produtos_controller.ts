@@ -3,10 +3,10 @@ import Produto from '#models/produto'
 
 export default class ProdutosController {
   public async index({}: HttpContext) {
-    return await Produto.all()
+    return await Produto.query().preload('categoria')
   }
   public async show({ params }: HttpContext) {
-    return await Produto.findOrFail(params.id)
+    return await Produto.query().where('id', params.id).preload('categoria').firstOrFail()
   }
   public async store({ request }: HttpContext) {
     return await Produto.create(request.only(['nome', 'descricao', 'preco', 'quantidadeEstoque']))
@@ -20,6 +20,6 @@ export default class ProdutosController {
   public async destroy({ params }: HttpContext) {
     const produto = await Produto.findOrFail(params.id)
     await produto.delete()
-    return produto
+    return { message: 'Produto deletado com sucesso.' }
   }
 }
