@@ -2,9 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Categoria from '#models/categoria'
 
 export default class CategoriasController {
-
   async index({}: HttpContext) {
-    const categorias = await Categoria.all()
+    const categorias = await Categoria.query().preload('produto')
     return categorias
   }
 
@@ -15,9 +14,10 @@ export default class CategoriasController {
   }
 
   async show({ params }: HttpContext) {
-    const categoria = await Categoria.query().where('id', params.id).preload('produto', (query) => {
-      query.select('id', 'nome', 'preco')
-    }).firstOrFail()
+    const categoria = await Categoria.query()
+      .where('id', params.id)
+      .preload('produto')
+      .firstOrFail()
     return categoria
   }
 
@@ -32,6 +32,6 @@ export default class CategoriasController {
   async destroy({ params }: HttpContext) {
     const categoria = await Categoria.findOrFail(params.id)
     await categoria.delete()
-    return { message: 'Categoria deletada com sucesso' }
+    return { message: 'Categoria deletada com sucesso.' }
   }
 }
