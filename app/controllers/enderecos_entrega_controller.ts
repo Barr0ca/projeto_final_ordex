@@ -1,9 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import EnderecoEntrega from '#models/endereco_entrega'
 export default class EnderecoEntregasesController {
-  
   async index({}: HttpContext) {
-    return EnderecoEntrega.query().preload('usuario').preload('pedido')
+    return await EnderecoEntrega.all()
   }
 
   async store({ request }: HttpContext) {
@@ -14,36 +13,25 @@ export default class EnderecoEntregasesController {
       'caixaPostal',
       'pais',
       'pedidoId',
-      'usuarioId'
+      'usuarioId',
     ])
-    return EnderecoEntrega.create(data)
+    return await EnderecoEntrega.create(data)
   }
 
   async show({ params }: HttpContext) {
-    return EnderecoEntrega.query()
-    .where('id', params.id)
-    .preload('usuario')
-    .preload('pedido')
-    .firstOrFail()
+    return await EnderecoEntrega.findOrFail(params.id)
   }
 
   async update({ params, request }: HttpContext) {
     const endereco = await EnderecoEntrega.findOrFail(params.id)
-    endereco.merge(request.only([
-      'endereco',
-      'cidade',
-      'estado',
-      'caixaPostal',
-      'pais'
-      ])
-    )
-    await endereco.save()
-    return endereco
+    return await endereco
+      .merge(request.only(['endereco', 'cidade', 'estado', 'caixaPostal', 'pais']))
+      .save()
   }
- 
+
   async destroy({ params }: HttpContext) {
     const endereco = await EnderecoEntrega.findOrFail(params.id)
-    endereco.delete()
-    return { message: 'Endereço de entrega deletado com sucesso' }
+    await endereco.delete()
+    return { message: 'Endereço de entrega deletado com sucesso.' }
   }
 }
