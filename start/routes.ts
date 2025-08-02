@@ -5,6 +5,7 @@ const EnderecosEntregaController = () => import('#controllers/enderecos_entrega_
 const PagamentosController = () => import('#controllers/pagamentos_controller')
 const PedidosController = () => import('#controllers/pedidos_controller')
 const ProdutosController = () => import('#controllers/produtos_controller')
+const UsuariosController = () => import('#controllers/usuarios_controller')
 
 const CategoriaProdutosController = () => import('#controllers/categoria_produtos_controller')
 const ItensPedidosController = () => import('#controllers/itens_pedidos_controller')
@@ -14,6 +15,7 @@ router.resource('/endereco-entrega', EnderecosEntregaController).except(['create
 router.resource('/pagamento', PagamentosController).except(['create', 'edit'])
 router.resource('/pedido', PedidosController).except(['create', 'edit'])
 router.resource('/produto', ProdutosController).except(['create', 'edit'])
+router.resource('/usuario', UsuariosController).except(['create', 'edit'])
 
 router.post('/categoria/:id/associar-produto', [
   CategoriaProdutosController,
