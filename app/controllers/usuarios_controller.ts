@@ -1,4 +1,5 @@
 import Usuario from '#models/usuario'
+import { createUsuarioValidator, updateUsuarioValidator } from '#validators/usuario'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsuariosController {
@@ -7,7 +8,8 @@ export default class UsuariosController {
   }
 
   async store({ request }: HttpContext) {
-    return await Usuario.create(request.only(['nome', 'email', 'senha']))
+    const payload = await request.validateUsing(createUsuarioValidator)
+    return await Usuario.create(payload)
   }
 
   async show({ params }: HttpContext) {
@@ -20,7 +22,8 @@ export default class UsuariosController {
 
   async update({ params, request }: HttpContext) {
     const usuario = await Usuario.findOrFail(params.id)
-    return await usuario.merge(request.only(['nome', 'email', 'senha'])).save()
+    const payload = await request.validateUsing(updateUsuarioValidator)
+    return await usuario.merge(payload).save()
   }
 
   async destroy({ params }: HttpContext) {
