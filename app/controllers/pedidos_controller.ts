@@ -1,4 +1,5 @@
 import Pedido from '#models/pedido'
+import { createPedidoValidator, updatePedidoValidator } from '#validators/pedido'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class PedidosController {
@@ -10,7 +11,8 @@ export default class PedidosController {
   }
 
   async store({ request }: HttpContext) {
-    return await Pedido.create(request.only(['status', 'total', 'usuarioId']))
+    const payload = await request.validateUsing(createPedidoValidator)
+    return await Pedido.create(payload)
   }
 
   async show({ params }: HttpContext) {
@@ -24,7 +26,8 @@ export default class PedidosController {
 
   async update({ params, request }: HttpContext) {
     const pedido = await Pedido.findOrFail(params.id)
-    return await pedido.merge(request.only(['status', 'total', 'usuarioId'])).save()
+    const payload = await request.validateUsing(updatePedidoValidator)
+    return await pedido.merge(payload).save()
   }
 
   async destroy({ params }: HttpContext) {
