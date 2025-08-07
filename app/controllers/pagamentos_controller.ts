@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Pagamento from '#models/pagamento'
+import { createPagamentoValidator, updatePagamentoValidator } from '#validators/pagamento'
 
 export default class PagamentosController {
   public async index({}: HttpContext) {
@@ -11,15 +12,14 @@ export default class PagamentosController {
   }
 
   public async store({ request }: HttpContext) {
-    return await Pagamento.create(
-      request.only(['metodosPagamento', 'status', 'valorPagamento', 'pedidoId'])
-    )
+    const payload = await request.validateUsing(createPagamentoValidator)
+    return await Pagamento.create(payload)
   }
 
   public async update({ request, params }: HttpContext) {
     const pagamento = await Pagamento.findOrFail(params.id)
-    pagamento.merge(request.only(['metodosPagamento', 'status', 'valorPagamento', 'pedidoId']))
-    return await pagamento.save()
+    const payload = await request.validateUsing(updatePagamentoValidator)
+    return await pagamento.merge(payload)
   }
 
   public async destroy({ params }: HttpContext) {
