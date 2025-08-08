@@ -9,8 +9,8 @@ enum Status {
 
 export const createPedidoValidator = vine.compile(
   vine.object({
-    status: vine.enum(Status),
-    total: vine.number().positive(),
+    status: vine.enum(Status).optional(),
+    total: vine.number().positive().withoutDecimals(),
     usuarioId: vine.number().positive().min(1),
   })
 )
@@ -18,6 +18,7 @@ export const createPedidoValidator = vine.compile(
 export const updatePedidoValidator = vine.compile(
   vine.object({
     status: vine.enum(Status).optional(),
-    total: vine.number().positive().optional(),
+    total: vine.number().positive().withoutDecimals(),
+    usuarioId: vine.number().positive().min(1),
   })
 )
