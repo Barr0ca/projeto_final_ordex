@@ -1,3 +1,4 @@
+import { createProdutoValidator, updateProdutoValidator } from '#validators/produto'
 import type { HttpContext } from '@adonisjs/core/http'
 import Produto from '#models/produto'
 
@@ -11,13 +12,14 @@ export default class ProdutosController {
   }
 
   public async store({ request }: HttpContext) {
-    return await Produto.create(request.only(['nome', 'descricao', 'preco', 'quantidadeEstoque']))
+    const payload = await request.validateUsing(createProdutoValidator)
+    return await Produto.create(payload)
   }
 
   public async update({ request, params }: HttpContext) {
     const produto = await Produto.findOrFail(params.id)
-    produto.merge(request.only(['nome', 'descricao', 'preco', 'quantidadeEstoque']))
-    return await produto.save()
+    const payload = await request.validateUsing(updateProdutoValidator)
+    return await produto.merge(payload).save()
   }
 
   public async destroy({ params }: HttpContext) {
