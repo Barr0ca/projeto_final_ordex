@@ -19,7 +19,7 @@ export default class PagamentosController {
   public async update({ request, params }: HttpContext) {
     const pagamento = await Pagamento.findOrFail(params.id)
     const payload = await request.validateUsing(updatePagamentoValidator)
-    return await pagamento.merge(payload)
+    return await pagamento.merge(payload).save()
   }
 
   public async destroy({ params }: HttpContext) {
