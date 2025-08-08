@@ -1,18 +1,31 @@
 import vine from '@vinejs/vine'
 
+enum MetodoPagamento {
+  CARTAO_CREDITO = 'CARTAO_CREDITO',
+  PIX = 'PIX',
+  BOLETO = 'BOLETO',
+}
+
+enum Status {
+  ESPERA = 'ESPERA',
+  COMPLETO = 'COMPLETO',
+  FALHOU = 'FALHOU',
+}
+
 export const createPagamentoValidator = vine.compile(
   vine.object({
-    metodos_pagamento: vine.enum(['CARTAO_CREDITO', 'PIX', 'BOLETO'] as const),
-    status: vine.enum(['ESPERA', 'COMPLETO', 'FALHOU'] as const),
-    valor_pagamento: vine.number().positive(),
-    pedido_id: vine.number().positive()
+    metodosPagamento: vine.enum(MetodoPagamento),
+    status: vine.enum(Status).optional(),
+    valorPagamento: vine.number().positive().withoutDecimals(),
+    pedidoId: vine.number().positive().min(1),
   })
 )
 
 export const updatePagamentoValidator = vine.compile(
   vine.object({
-    metodos_pagamento: vine.enum(['CARTAO_CREDITO', 'PIX', 'BOLETO'] as const).optional(),
-    status: vine.enum(['ESPERA', 'COMPLETO', 'FALHOU'] as const).optional(),
-    valor_pagamento: vine.number().positive().optional(),
+    metodosPagamento: vine.enum(MetodoPagamento),
+    status: vine.enum(Status).optional(),
+    valorPagamento: vine.number().positive().withoutDecimals(),
+    pedidoId: vine.number().positive().min(1),
   })
 )
