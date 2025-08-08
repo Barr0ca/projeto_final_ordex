@@ -11,7 +11,6 @@ export default class CategoriasController {
   async store({ request }: HttpContext) {
     const payload = await request.validateUsing(createCategoriaValidator)
     return await Categoria.create(payload)
- 
   }
 
   async show({ params }: HttpContext) {
