@@ -1,21 +1,18 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import EnderecoEntrega from '#models/endereco_entrega'
+import {
+  createEnderecoEntregaValidator,
+  updateEnderecoEntregaValidator,
+} from '#validators/enderecos_entrega'
+
 export default class EnderecoEntregasesController {
   async index({}: HttpContext) {
     return await EnderecoEntrega.all()
   }
 
   async store({ request }: HttpContext) {
-    const data = request.only([
-      'endereco',
-      'cidade',
-      'estado',
-      'caixaPostal',
-      'pais',
-      'pedidoId',
-      'usuarioId',
-    ])
-    return await EnderecoEntrega.create(data)
+    const payload = await request.validateUsing(createEnderecoEntregaValidator)
+    return await EnderecoEntrega.create(payload)
   }
 
   async show({ params }: HttpContext) {
@@ -23,10 +20,9 @@ export default class EnderecoEntregasesController {
   }
 
   async update({ params, request }: HttpContext) {
+    const payload = await request.validateUsing(updateEnderecoEntregaValidator)
     const endereco = await EnderecoEntrega.findOrFail(params.id)
-    return await endereco
-      .merge(request.only(['endereco', 'cidade', 'estado', 'caixaPostal', 'pais']))
-      .save()
+    return await endereco.merge(payload).save()
   }
 
   async destroy({ params }: HttpContext) {
