@@ -18,7 +18,7 @@ export default class ProdutosController {
 
   public async update({ request, params }: HttpContext) {
     const produto = await Produto.findOrFail(params.id)
-    const payload = await request.validateUsing(updateProdutoValidator) 
+    const payload = await request.validateUsing(updateProdutoValidator)
     return await produto.merge(payload).save()
   }
 
